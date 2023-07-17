@@ -1,9 +1,5 @@
 #!/bin/bash
 
-try() {
-    "$@" || return $?
-}
-
 # Funzione per gestire l'errore durante l'installazione di MicroK8s
 handle_installation_error() {
     echo "Si è verificato un errore durante l'installazione di MicroK8s."
@@ -28,17 +24,14 @@ enable_addon() {
 }
 
 # Blocco "try" per l'installazione di MicroK8s
-try {
+{
     echo "Hello $(whoami)"
 
     # Mi sposto nella home
     cd
 
     # Installa MicroK8s in background
-    sudo snap install microk8s --classic &
-
-    # Aspetta che l'installazione sia completata
-    wait %1 || handle_installation_error
+    (sudo snap install microk8s --classic && wait %1) || handle_installation_error
 
     # Imposta le autorizzazioni e l'alias per kubectl
     sudo usermod -a -G microk8s $USER
@@ -51,34 +44,34 @@ try {
     # Blocco "try-catch" per abilitare gli addon
 
     # Abilita l'addon DNS
-    try {
+    {
         enable_addon dns
-    } catch {
+    } || {
         handle_addon_error "DNS"
     }
 
     # Abilita l'addon Ingress
-    try {
+    {
         enable_addon ingress
-    } catch {
+    } || {
         handle_addon_error "Ingress"
     }
 
     # Abilita l'addon Dashboard
-    try {
+    {
         enable_addon dashboard
-    } catch {
+    } || {
         handle_addon_error "Dashboard"
     }
 
     # Abilita l'addon HostPath Storage
-    try {
+    {
         enable_addon hostpath-storage
-    } catch {
+    } || {
         handle_addon_error "HostPath Storage"
     }
 
-} catch {
+} || {
     # Gestione degli errori durante l'installazione di MicroK8s
     handle_installation_error
 }
