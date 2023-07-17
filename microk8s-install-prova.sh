@@ -30,6 +30,12 @@ enable_addon() {
     # Mi sposto nella home
     cd
 
+    # Verifica se MicroK8s è già installato
+    if command -v microk8s &>/dev/null; then
+        echo "MicroK8s è già installato."
+    else
+        echo "MicroK8s non è installato. Avvio l'installazione..."   
+
     # Installa MicroK8s in background
     (sudo snap install microk8s --classic) || handle_installation_error
 
@@ -41,8 +47,8 @@ enable_addon() {
 
     echo "MicroK8s è stato installato correttamente."
 
-    # Blocco "try-catch" per abilitare gli addon
-
+    fi
+    
     # Abilita l'addon DNS
     {
         enable_addon dns
