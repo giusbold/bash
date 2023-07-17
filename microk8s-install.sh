@@ -1,5 +1,9 @@
 #!/bin/bash
 
+try() {
+    "$@" || return $?
+}
+
 # Funzione per gestire l'errore durante l'installazione di MicroK8s
 handle_installation_error() {
     echo "Si è verificato un errore durante l'installazione di MicroK8s."
