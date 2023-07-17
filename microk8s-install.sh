@@ -31,7 +31,7 @@ enable_addon() {
     cd
 
     # Installa MicroK8s in background
-    (sudo snap install microk8s --classic && wait %1) || handle_installation_error
+    (sudo snap install microk8s --classic) || handle_installation_error
 
     # Imposta le autorizzazioni e l'alias per kubectl
     sudo usermod -a -G microk8s $USER
