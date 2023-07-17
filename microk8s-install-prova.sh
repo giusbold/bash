@@ -37,12 +37,12 @@ enable_addon() {
         echo "MicroK8s non è installato. Avvio l'installazione..."   
 
     # Installa MicroK8s in background
-    (sudo snap install microk8s --classic) || handle_installation_error
+    (snap install microk8s --classic) || handle_installation_error
 
     # Imposta le autorizzazioni e l'alias per kubectl
-    sudo usermod -a -G microk8s $USER
+    usermod -a -G microk8s $USER
     newgrp microk8s
-    sudo chown -f -R $USER ~/.kube
+    chown -f -R $USER ~/.kube
     alias kubectl='microk8s kubectl'
 
     echo "MicroK8s è stato installato correttamente."
